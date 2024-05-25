@@ -1,14 +1,23 @@
+import { Link, NavLink } from "react-router-dom";
+
 const Nav = () => {
   return (
     <nav className="nav">
-      <div className="logo">PE<br></br>DB</div>
-      <div className="sort-links">
-        <div className="sort-link">Sort by Title</div>
-        <div className="sort-link">Sort by Composer</div>
-        <div className="sort-link">Sort by Publisher</div>
+      <Link to="/" className="home-logo-link">
+        <div className="logo">
+          PE<br></br>DB
+        </div>
+      </Link>
+      <div className="nav-links">
+        <NavLink className="link" to="/">
+          Home
+        </NavLink>
+        <NavLink className="link" to="/publishers">
+          Publishers
+        </NavLink>
       </div>
     </nav>
-  )
-}
+  );
+};
 
-export default Nav
+export default Nav;

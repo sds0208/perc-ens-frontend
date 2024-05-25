@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-const ListRow = ({ ens }) => {
+const ListRow = ({ ens, isList }) => {
     const returnPublisher = (linkString) => {
         let publisher = '';
         if (linkString.includes('tapspace')) {
@@ -14,7 +14,9 @@ const ListRow = ({ ens }) => {
     }
     return (
         <div className="list-row">
-            <div className="title">{ens.title} - {ens.composer}</div>
+            <div className="title">{ens.title} <span className={ens.link.includes('c-alan') ? 'hide' : ''}>-</span> {ens.composer}</div>
+            <Link to={`/ensemble/${ens.id}`} className={isList ? 'link' : 'link hide'}>View More Details</Link>
+            <span className={isList ? 'margin-left' : 'hide'}>|</span>
             <Link to={ens.link} className="link">View on {returnPublisher(ens.link)}</Link>
         </div>
     )

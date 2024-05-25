@@ -1,6 +1,19 @@
 $green-color: #91fa9b;
 $dark-color: #454969;
 
+@mixin button-base {
+    height: 40px;
+    border-radius: 5px;
+    line-height: 38px;
+    border: 1px solid transparent;
+    text-decoration: none;
+    cursor: pointer;
+
+    &:not(:last-child) {
+        margin-right: 20px;
+    }
+}
+
 body {
     background: $dark-color;
     color: #fff;
@@ -21,6 +34,11 @@ body {
     align-items: center;
     color: $dark-color;
 
+    .home-logo-link {
+        text-decoration: none;
+        color: $dark-color;
+    }
+
     .logo {
         font-size: 24px;
         font-weight: bold;
@@ -28,11 +46,20 @@ body {
         border: 2px solid $dark-color;
     }
 
-    .sort-links {
+    .nav-links {
         display: flex;
 
-        .sort-link:not(:last-child) {
-            margin-right: 20px;
+        .link {
+            @include button-base;
+            background: $dark-color;
+            color: #fff;
+            width: 120px;
+            
+            &:hover {
+                background: #fff;
+                color: $dark-color;
+                border-color: $dark-color;
+            }
         }
     }
 }
@@ -41,24 +68,63 @@ body {
     max-width: 1440px;
     margin-top: 80px;
 
-    .list-wrapper {
-        margin-top: 40px;
+    .sort-links {
+        display: flex;
+        justify-content: center;
+        margin-top: 40px; 
 
-        .list-row {
-            display: flex;
-            justify-content: center;
-            padding: 10px;
+        .sort-link {
+            @include button-base;
+            background: $green-color;
+            color: $dark-color;
+            width: 160px;
 
-            .link {
-                color: $green-color;
-                margin-left: 10px; 
+            &:hover {
+                background: #fff;
+                border-color: $green-color;
             }
         }
+        
+        
+    }
+
+    .list-wrapper {
+        margin-top: 20px;
     }
 
     .list-nav {
         display: flex;
         justify-content: center;
         margin-top: 40px;
+    }
+}
+
+.list-row {
+    display: flex;
+    justify-content: center;
+    padding: 10px;
+
+    .link {
+        color: $green-color;
+        margin-left: 10px; 
+    }
+
+    span.margin-left {
+        margin-left: 10px;
+    }
+}
+
+.publishers-page {
+
+    margin-top: 80px;
+
+    p {
+        margin-bottom: 40px;
+    }
+
+    .link {
+        color: $green-color;
+        display: block;
+        margin-bottom: 20px;
     }
 }
