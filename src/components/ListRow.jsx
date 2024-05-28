@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-const ListRow = ({ ens, isList, dataPage, currentPage }) => {
+const ListRow = ({ ens, isList, dataPage, currentPage, searchTerm }) => {
   const returnPublisher = (linkString) => {
     let publisher = "";
     if (linkString.includes("tapspace")) {
@@ -12,9 +12,27 @@ const ListRow = ({ ens, isList, dataPage, currentPage }) => {
     }
     return publisher;
   };
+
+  const isInSearch = () => {
+    if (
+      searchTerm === "" ||
+      ens.title.toLowerCase().includes(searchTerm) ||
+      ens.composer.toLowerCase().includes(searchTerm) ||
+      ens.link.toLowerCase().includes(searchTerm)
+    ) {
+      return true;
+    }
+  };
+
   return (
     <div
-      className={dataPage == currentPage ? "list-row" : "list-row hide"}
+      className={
+        (dataPage == currentPage && searchTerm === "") ||
+        (searchTerm && isInSearch()) ||
+        !isList
+          ? "list-row"
+          : "list-row hide"
+      }
       data-page={dataPage}
     >
       <div className="title">

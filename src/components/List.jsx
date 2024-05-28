@@ -2,21 +2,28 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import ListNav from "./ListNav";
 import ListRow from "./ListRow";
 import Spinner from "./Spinner";
+import SearchBar from "./SearchBar";
 
 const List = () => {
   const [sortMethod, setSortMethod] = useState("title");
   const [allEnsembles, setAllEnsembles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
+  const [searchTerm, setSearchTerm] = useState("");
 
   const totalPages = useRef(0);
   const totalEnsembles = useRef(0);
+
+  useEffect(() => {
+    console.log("searchTerm changed to:", searchTerm);
+  }, [searchTerm]);
 
   const updateSortMethod = useCallback((e) => {
     setSortMethod(e.target.getAttribute("data-value"));
   }, []);
 
   // Parse out composer for those that have it in title string
+  // Update this once scraping is completed
   const returnEnsembleArrayWithComposer = useCallback((arr) => {
     arr.forEach((item, ind) => {
       let composer = item.composer ? item.composer : "";
@@ -46,6 +53,7 @@ const List = () => {
       }
     });
     // Move items with no composer to the end
+    // This might not be necessary soon
     if (sortMethod === "composer") {
       const noComposerList = [];
       while (newArray[0].composer == "") {
@@ -53,7 +61,6 @@ const List = () => {
       }
       newArray.push(...noComposerList);
     }
-    console.log(newArray.length);
     setAllEnsembles(newArray);
     setCurrentPage(1);
   }, [sortMethod]);
@@ -62,14 +69,24 @@ const List = () => {
   useEffect(() => {
     const fetchAllEnsembles = async () => {
       try {
+        // Get ensemble list from backend
         const res = await fetch("http://localhost:3000/api/v1/ensembles");
         let data = await res.json();
-        data.sort((a, b) =>
+
+        // Remove duplicate digital versions from C.Alan
+        let filteredData = data.filter(
+          (item) => !item["title"].includes("[DIG")
+        );
+
+        // Initially sort by title
+        filteredData.sort((a, b) =>
           a["title"]?.trim().localeCompare(b["title"]?.trim())
         );
-        setAllEnsembles(returnEnsembleArrayWithComposer(data));
-        totalEnsembles.current = data.length;
-        totalPages.current = Math.ceil(data.length / 20);
+        setAllEnsembles(returnEnsembleArrayWithComposer(filteredData));
+
+        // Set total ensembles and number of pages
+        totalEnsembles.current = filteredData.length;
+        totalPages.current = Math.ceil(filteredData.length / 20);
       } catch (error) {
         console.error("Error in fetch call for percussion ensembles.", error);
       } finally {
@@ -111,6 +128,10 @@ const List = () => {
           Sort by Publisher
         </div>
       </div>
+      <SearchBar
+        updateSearch={(str) => setSearchTerm(str)}
+        clearSearch={(str) => setSearchTerm(str)}
+      />
       <div className={loading ? "loading-icon" : "loading-icon hide"}>
         <Spinner />
       </div>
@@ -126,6 +147,7 @@ const List = () => {
             ens={ens}
             isList={true}
             currentPage={currentPage}
+            searchTerm={searchTerm}
           />
         ))}
       </div>

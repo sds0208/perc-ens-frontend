@@ -205,3 +205,27 @@ h1 {
         margin-bottom: 20px;
     }
 }
+
+.search-bar {
+    margin-top: 40px;
+
+    button {
+        margin-left: 10px;
+        height: 30px;
+        width: 100px;
+        border-radius: 5px;
+        background: #fff;
+        color: $dark-color;
+        border: none;
+        cursor: pointer;
+
+        &:hover {
+            background: $green-color;
+        }
+    }
+
+    input {
+        width: 250px;
+        height: 30px;
+    }
+}
