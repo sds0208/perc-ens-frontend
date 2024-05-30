@@ -1,6 +1,13 @@
 import { Link } from "react-router-dom";
 
-const ListRow = ({ ens, isList, dataPage, currentPage, searchTerm }) => {
+const ListRow = ({
+  ens,
+  isList,
+  dataPage,
+  currentPage,
+  searchTerm,
+  getAudioSrc,
+}) => {
   const returnPublisher = (linkString) => {
     let publisher = "";
     if (linkString.includes("tapspace")) {
@@ -35,21 +42,27 @@ const ListRow = ({ ens, isList, dataPage, currentPage, searchTerm }) => {
       }
       data-page={dataPage}
     >
-      <div className="title">
-        {ens.title}{" "}
-        <span className={ens.link.includes("c-alan") ? "hide" : ""}>-</span>{" "}
-        {ens.composer}
-      </div>
-      <Link
-        to={`/ensemble/${ens.id}`}
-        className={isList ? "link" : "link hide"}
+      <div className="title">{ens.title} </div>
+      <div className="composer">{ens.composer}</div>
+      <div
+        className={ens.audio ? "play-button" : "play-button hide"}
+        onClick={getAudioSrc}
       >
-        View More Details
-      </Link>
-      <span className={isList ? "margin-left" : "hide"}>|</span>
-      <Link to={ens.link} className="link">
-        View on {returnPublisher(ens.link)}
-      </Link>
+        Click to Play!
+      </div>
+
+      <div className="link-wrapper">
+        <Link
+          to={`/ensemble/${ens.id}`}
+          className={isList ? "link" : "link hide"}
+        >
+          View More Details
+        </Link>
+        <span className={isList ? "margin-left" : "hide"}> | </span>
+        <Link to={ens.link} className="link">
+          View on {returnPublisher(ens.link)}
+        </Link>
+      </div>
     </div>
   );
 };

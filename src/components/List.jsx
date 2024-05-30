@@ -3,6 +3,7 @@ import ListNav from "./ListNav";
 import ListRow from "./ListRow";
 import Spinner from "./Spinner";
 import SearchBar from "./SearchBar";
+import MediaPlayer from "./MediaPlayer";
 
 const List = () => {
   const [sortMethod, setSortMethod] = useState("title");
@@ -10,9 +11,16 @@ const List = () => {
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
+  const [audioSrc, setAudioSrc] = useState("");
 
   const totalPages = useRef(0);
   const totalEnsembles = useRef(0);
+
+  useEffect(() => {
+    if (audioSrc.includes("soundcloud")) {
+      console.log(audioSrc);
+    }
+  }, [audioSrc]);
 
   useEffect(() => {
     console.log("searchTerm changed to:", searchTerm);
@@ -22,18 +30,24 @@ const List = () => {
     setSortMethod(e.target.getAttribute("data-value"));
   }, []);
 
-  // Parse out composer for those that have it in title string
+  // Format composer values for consistency
   // Update this once scraping is completed
   const returnEnsembleArrayWithComposer = useCallback((arr) => {
     arr.forEach((item, ind) => {
-      let composer = item.composer ? item.composer : "";
-      if (item.link.includes("c-alan") && item.title.includes("-")) {
-        const itemArr = item.title.split("-");
-        itemArr.forEach((str) => {
-          if (str.includes("[DIG")) {
-            composer = str.slice(0, str.indexOf("[DIG")).trim();
-          }
-        });
+      let composer = item.composer || "";
+      let nameArr;
+      if (composer.length && !composer.includes(",")) {
+        nameArr = composer.split(" ");
+        if (composer.includes("Santa Cruz")) {
+          composer = "Santa Cruz, Sarah";
+        } else {
+          composer = `${nameArr[nameArr.length - 1]}, ${nameArr
+            .slice(0, nameArr.length - 1)
+            .join(" ")}`;
+        }
+      }
+      if (composer.length && composer.includes("(")) {
+        composer = composer.slice(0, composer.indexOf("(") - 1);
       }
       arr[ind]["composer"] = composer;
     });
@@ -44,13 +58,7 @@ const List = () => {
   useEffect(() => {
     const newArray = [...allEnsembles];
     newArray.sort((a, b) => {
-      if (sortMethod === "composer") {
-        const strA = a[sortMethod].split(" ").reverse().join("");
-        const strB = b[sortMethod].split(" ").reverse().join("");
-        return strA.localeCompare(strB);
-      } else {
-        return a[sortMethod]?.trim().localeCompare(b[sortMethod]?.trim());
-      }
+      return a[sortMethod]?.trim().localeCompare(b[sortMethod]?.trim());
     });
     // Move items with no composer to the end
     // This might not be necessary soon
@@ -83,6 +91,7 @@ const List = () => {
           a["title"]?.trim().localeCompare(b["title"]?.trim())
         );
         setAllEnsembles(returnEnsembleArrayWithComposer(filteredData));
+        // setAllEnsembles(filteredData);
 
         // Set total ensembles and number of pages
         totalEnsembles.current = filteredData.length;
@@ -135,10 +144,10 @@ const List = () => {
       <div className={loading ? "loading-icon" : "loading-icon hide"}>
         <Spinner />
       </div>
-      <h4>
+      <p>
         {totalEnsembles.current} ensembles sorted by{" "}
         {sortMethod == "link" ? "publisher" : sortMethod}
-      </h4>
+      </p>
       <div className={loading ? "list-wrapper hide" : "list-wrapper"}>
         {allEnsembles.map((ens, ind) => (
           <ListRow
@@ -148,6 +157,7 @@ const List = () => {
             isList={true}
             currentPage={currentPage}
             searchTerm={searchTerm}
+            getAudioSrc={() => setAudioSrc(ens.audio)}
           />
         ))}
       </div>
@@ -163,6 +173,7 @@ const List = () => {
           setCurrentPage((prev) => (currentPage > 1 ? prev - 1 : prev))
         }
       />
+      <MediaPlayer audioSrc={audioSrc} />
     </div>
   );
 };

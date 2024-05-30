@@ -1,5 +1,5 @@
 import { useParams, useLoaderData } from "react-router-dom";
-import ListRow from "./ListRow";
+import ListRow from "../components/ListRow";
 
 const EnsemblePage = () => {
   const { id } = useParams();

@@ -5,10 +5,10 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import "./App.css";
-import MainLayout from "./components/MainLayout";
+import MainLayout from "./layouts/MainLayout";
 import List from "./components/List";
-import EnsemblePage, { ensembleLoader } from "./components/EnsemblePage";
-import PublishersPage from "./components/PublishersPage";
+import EnsemblePage, { ensembleLoader } from "./pages/EnsemblePage";
+import PublishersPage from "./pages/PublishersPage";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
