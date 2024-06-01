@@ -1,13 +1,14 @@
 import { Link } from "react-router-dom";
+import Hero from "../components/Hero";
 
 const PublishersPage = () => {
   return (
     <div className="publishers-page">
-      <h1>Publishers</h1>
-      <p>
-        The ensembles found on this site are sourced from the following
-        publishers:
-      </p>
+      <Hero
+        title="Publishers"
+        subtitle="The ensembles found on this site are sourced from the following
+        publishers:"
+      />
       <Link to="https://c-alanpublications.com/" className="link">
         C. Alan
       </Link>

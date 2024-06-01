@@ -1,9 +1,11 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import ListNav from "./ListNav";
-import ListRow from "./ListRow";
-import Spinner from "./Spinner";
-import SearchBar from "./SearchBar";
-import MediaPlayer from "./MediaPlayer";
+import ListNav from "../components/ListNav";
+import ListRow from "../components/ListRow";
+import Spinner from "../components/Spinner";
+import SearchBar from "../components/SearchBar";
+import MediaPlayer from "../components/MediaPlayer";
+import SortLinks from "../components/SortLinks";
+import Hero from "../components/Hero";
 
 const List = () => {
   const [sortMethod, setSortMethod] = useState("title");
@@ -11,10 +13,13 @@ const List = () => {
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
+  const [searchResultsCount, setSearchResultsCount] = useState(0);
   const [audioSrc, setAudioSrc] = useState("");
+  const [searchResultsRendered, setSearchResultsRendered] = useState(true);
 
   const totalPages = useRef(0);
   const totalEnsembles = useRef(0);
+  const listParentRef = useRef();
 
   useEffect(() => {
     if (audioSrc.includes("soundcloud")) {
@@ -23,11 +28,30 @@ const List = () => {
   }, [audioSrc]);
 
   useEffect(() => {
-    console.log("searchTerm changed to:", searchTerm);
+    setSearchResultsRendered(false);
+    console.log({ searchResultsRendered });
   }, [searchTerm]);
 
-  const updateSortMethod = useCallback((e) => {
-    setSortMethod(e.target.getAttribute("data-value"));
+  const updateSearch = useCallback((str) => {
+    setSearchTerm(str);
+    setTimeout(() => {
+      console.log(
+        listParentRef.current.querySelectorAll(".list-row:not(.hide)")
+      );
+      setSearchResultsCount(
+        listParentRef.current.querySelectorAll(".list-row:not(.hide)").length
+      );
+      setSearchResultsRendered(true);
+      console.log({ searchResultsRendered });
+    }, 500);
+  }, []);
+
+  const updateSearchCount = useCallback((count) => {
+    setSearchResultsCount(count);
+  }, []);
+
+  const updateSortMethod = useCallback((method) => {
+    setSortMethod(method);
   }, []);
 
   // Format composer values for consistency
@@ -107,48 +131,46 @@ const List = () => {
   }, []);
 
   return (
-    <div className="list">
-      <h1>Percussion Ensemble DB</h1>
-      <p>A list of percussion ensembles offered by several major publishers</p>
-      <div className="sort-links">
-        <div
-          className={
-            sortMethod === "title" ? "sort-link selected" : "sort-link"
-          }
-          data-value="title"
-          onClick={updateSortMethod}
-        >
-          Sort by Title
-        </div>
-        <div
-          className={
-            sortMethod === "composer" ? "sort-link selected" : "sort-link"
-          }
-          data-value="composer"
-          onClick={updateSortMethod}
-        >
-          Sort by Composer
-        </div>
-        <div
-          className={sortMethod === "link" ? "sort-link selected" : "sort-link"}
-          data-value="link"
-          onClick={updateSortMethod}
-        >
-          Sort by Publisher
-        </div>
-      </div>
+    <div className="list" ref={listParentRef}>
+      <Hero
+        title="Percussion Ensemble DB"
+        subtitle="A database of percussion ensembles offered by several major publishers"
+      />
+      <SortLinks sortMethod={sortMethod} updateSortMethod={updateSortMethod} />
       <SearchBar
-        updateSearch={(str) => setSearchTerm(str)}
-        clearSearch={(str) => setSearchTerm(str)}
+        updateSearch={(str) => updateSearch(str)}
+        clearSearch={(str) => updateSearch(str)}
       />
       <div className={loading ? "loading-icon" : "loading-icon hide"}>
         <Spinner />
       </div>
-      <p>
-        {totalEnsembles.current} ensembles sorted by{" "}
+      {/* All Results Count */}
+      <p
+        className={searchTerm === "" ? "ensemble-count" : "ensemble-count hide"}
+        key={`${sortMethod}-1`}
+      >
+        {`${totalEnsembles.current} ensembles sorted by `}
         {sortMethod == "link" ? "publisher" : sortMethod}
       </p>
-      <div className={loading ? "list-wrapper hide" : "list-wrapper"}>
+      {/* Search Results Count */}
+      <p
+        className={
+          searchTerm.length > 0 && searchResultsRendered
+            ? "ensemble-count"
+            : "ensemble-count hide"
+        }
+        key={`${sortMethod}-2`}
+      >
+        {`${searchResultsCount} results sorted by `}
+        {sortMethod == "link" ? "publisher" : sortMethod}
+      </p>
+      <div
+        className={
+          loading || (searchTerm.length > 0 && !searchResultsRendered)
+            ? "list-wrapper hide"
+            : "list-wrapper"
+        }
+      >
         {allEnsembles.map((ens, ind) => (
           <ListRow
             dataPage={Math.floor(ind / 20) + 1}
@@ -158,6 +180,7 @@ const List = () => {
             currentPage={currentPage}
             searchTerm={searchTerm}
             getAudioSrc={() => setAudioSrc(ens.audio)}
+            searchResultsRendered={searchResultsRendered}
           />
         ))}
       </div>

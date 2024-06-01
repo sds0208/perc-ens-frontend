@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { FaPlayCircle } from "react-icons/fa";
 
 const ListRow = ({
   ens,
@@ -44,11 +45,8 @@ const ListRow = ({
     >
       <div className="title">{ens.title} </div>
       <div className="composer">{ens.composer}</div>
-      <div
-        className={ens.audio ? "play-button" : "play-button hide"}
-        onClick={getAudioSrc}
-      >
-        Click to Play!
+      <div className={ens.audio ? "play-button" : "play-button hide"}>
+        <FaPlayCircle className="play-button-icon" onClick={getAudioSrc} />
       </div>
 
       <div className="link-wrapper">
