@@ -3,9 +3,9 @@ import {
   MdKeyboardDoubleArrowLeft,
 } from "react-icons/md";
 
-const ListNav = ({ currentPage, totalPages, pageUp, pageDown }) => {
+const ListNav = ({ searchTerm, currentPage, totalPages, pageUp, pageDown }) => {
   return (
-    <div className="list-nav">
+    <div className={searchTerm === "" ? "list-nav" : "list-nav hide"}>
       <div className="arrow back-arrow" onClick={pageDown}>
         <MdKeyboardDoubleArrowLeft className="list-nav-icon" />
         <div>Back</div>

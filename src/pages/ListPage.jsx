@@ -18,6 +18,7 @@ const List = () => {
   const [searchResultsRendered, setSearchResultsRendered] = useState(true);
 
   const totalPages = useRef(0);
+  // const searchPages = useRef(0);
   const totalEnsembles = useRef(0);
   const listParentRef = useRef();
 
@@ -174,6 +175,7 @@ const List = () => {
       </div>
       {/* List Navigation */}
       <ListNav
+        searchTerm={searchTerm}
         currentPage={currentPage}
         totalPages={totalPages.current}
         pageUp={() =>
