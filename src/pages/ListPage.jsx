@@ -22,32 +22,17 @@ const List = () => {
   const listParentRef = useRef();
 
   useEffect(() => {
-    if (audioSrc.includes("soundcloud")) {
-      console.log(audioSrc);
-    }
-  }, [audioSrc]);
-
-  useEffect(() => {
     setSearchResultsRendered(false);
-    console.log({ searchResultsRendered });
   }, [searchTerm]);
 
   const updateSearch = useCallback((str) => {
     setSearchTerm(str);
     setTimeout(() => {
-      console.log(
-        listParentRef.current.querySelectorAll(".list-row:not(.hide)")
-      );
       setSearchResultsCount(
         listParentRef.current.querySelectorAll(".list-row:not(.hide)").length
       );
       setSearchResultsRendered(true);
-      console.log({ searchResultsRendered });
     }, 500);
-  }, []);
-
-  const updateSearchCount = useCallback((count) => {
-    setSearchResultsCount(count);
   }, []);
 
   const updateSortMethod = useCallback((method) => {
@@ -132,11 +117,13 @@ const List = () => {
 
   return (
     <div className="list" ref={listParentRef}>
+      {/* Page Hero */}
       <Hero
         title="Percussion Ensemble DB"
         subtitle="A database of percussion ensembles offered by several major publishers"
       />
       <SortLinks sortMethod={sortMethod} updateSortMethod={updateSortMethod} />
+      {/* Ensemble Search */}
       <SearchBar
         updateSearch={(str) => updateSearch(str)}
         clearSearch={(str) => updateSearch(str)}
@@ -164,6 +151,7 @@ const List = () => {
         {`${searchResultsCount} results sorted by `}
         {sortMethod == "link" ? "publisher" : sortMethod}
       </p>
+      {/* Ensemble List */}
       <div
         className={
           loading || (searchTerm.length > 0 && !searchResultsRendered)
@@ -184,6 +172,7 @@ const List = () => {
           />
         ))}
       </div>
+      {/* List Navigation */}
       <ListNav
         currentPage={currentPage}
         totalPages={totalPages.current}
@@ -196,6 +185,7 @@ const List = () => {
           setCurrentPage((prev) => (currentPage > 1 ? prev - 1 : prev))
         }
       />
+      {/* Media Player */}
       <MediaPlayer audioSrc={audioSrc} />
     </div>
   );
