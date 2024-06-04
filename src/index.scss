@@ -242,6 +242,59 @@ h1 {
     }
 }
 
+.filters-container {
+    display: flex;
+    justify-content: center;
+
+    .filters {
+        display: flex;
+        flex-direction: column;
+        width: 180px;
+        justify-content: center;
+        margin: 40px 10px 0;
+        position: relative;
+    
+        .selected-filter {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #fff;
+            color: $dark-color;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    
+        .filter-options {
+            background: #fff;
+            color: $dark-color;
+            border-radius: 5px;
+            position: absolute;
+            top: 50px;
+            width: 180px;
+            text-align: left;
+            box-shadow: 0 0 10px 0 $dark-color;
+            z-index: 2;
+            // max-height: 200px;
+            // overflow-y : scroll;
+    
+            .filter-option {
+                padding: 10px;
+                transition: all 250ms;
+                cursor: pointer;
+    
+                &:not(:last-child) {
+                    border-bottom: 1px solid $dark-color;
+                }
+    
+                &:hover {
+                    background: $green-color;
+                }
+            }
+        }
+    }
+}
+
 .publishers-page {
 
     margin-top: 80px;

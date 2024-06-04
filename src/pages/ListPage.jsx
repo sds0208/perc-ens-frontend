@@ -6,6 +6,7 @@ import SearchBar from "../components/SearchBar";
 import MediaPlayer from "../components/MediaPlayer";
 import SortLinks from "../components/SortLinks";
 import Hero from "../components/Hero";
+import Filters from "../components/Filters";
 
 const List = () => {
   const [sortMethod, setSortMethod] = useState("title");
@@ -124,6 +125,11 @@ const List = () => {
         subtitle="A database of percussion ensembles offered by several major publishers"
       />
       <SortLinks sortMethod={sortMethod} updateSortMethod={updateSortMethod} />
+      {/* Filters */}
+      <div className="filters-container">
+        <Filters filterHeader="Select Difficulty" filterContents={['Easy', 'Medium', 'Advanced']}/>
+        <Filters filterHeader="Number of Players" filterContents={['2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15+']}/>
+      </div>
       {/* Ensemble Search */}
       <SearchBar
         updateSearch={(str) => updateSearch(str)}
