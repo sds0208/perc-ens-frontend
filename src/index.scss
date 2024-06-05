@@ -59,6 +59,7 @@ h1 {
     color: $dark-color;
     position: sticky;
     top: 0;
+    z-index: 3;
 
     @media (max-width: 480px) {
         padding: 20px;

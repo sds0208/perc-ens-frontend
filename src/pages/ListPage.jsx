@@ -17,6 +17,7 @@ const List = () => {
   const [searchResultsCount, setSearchResultsCount] = useState(0);
   const [audioSrc, setAudioSrc] = useState("");
   const [searchResultsRendered, setSearchResultsRendered] = useState(true);
+  const [filterValues, setFilterValues] = useState({numPlayers: '', difficulty: ''});
 
   const totalPages = useRef(0);
   // const searchPages = useRef(0);
@@ -37,6 +38,20 @@ const List = () => {
     }, 500);
   }, []);
 
+  // Filter functionality
+  const updateDifficultyFilter = useCallback((str) => {
+    setFilterValues((prev) => ({...prev, difficulty: str}));
+  }, []);
+
+  const updateNumPlayersFilter = useCallback((str) => {
+    setFilterValues((prev) => ({...prev, numPlayers: str}));
+  }, []);
+
+  useEffect(() => {
+    console.log(filterValues);
+  }, [filterValues]);
+
+  // Sort
   const updateSortMethod = useCallback((method) => {
     setSortMethod(method);
   }, []);
@@ -127,8 +142,8 @@ const List = () => {
       <SortLinks sortMethod={sortMethod} updateSortMethod={updateSortMethod} />
       {/* Filters */}
       <div className="filters-container">
-        <Filters filterHeader="Select Difficulty" filterContents={['Easy', 'Medium', 'Advanced']}/>
-        <Filters filterHeader="Number of Players" filterContents={['2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15+']}/>
+        <Filters filterId="difficulty" filterHeader="Select Difficulty" filterContents={['Easy', 'Medium', 'Advanced']} updateFilters={updateDifficultyFilter}/>
+        <Filters filterId="numPlayers" filterHeader="Number of Players" filterContents={['2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15+']} updateFilters={updateNumPlayersFilter}/>
       </div>
       {/* Ensemble Search */}
       <SearchBar
@@ -176,6 +191,7 @@ const List = () => {
             searchTerm={searchTerm}
             getAudioSrc={() => setAudioSrc(ens.audio)}
             searchResultsRendered={searchResultsRendered}
+            filterValues={filterValues}
           />
         ))}
       </div>
@@ -192,6 +208,7 @@ const List = () => {
         pageDown={() =>
           setCurrentPage((prev) => (currentPage > 1 ? prev - 1 : prev))
         }
+        filterValues={filterValues}
       />
       {/* Media Player */}
       <MediaPlayer audioSrc={audioSrc} />

@@ -8,6 +8,7 @@ const ListRow = ({
   currentPage,
   searchTerm,
   getAudioSrc,
+  filterValues
 }) => {
   const returnPublisher = (linkString) => {
     let publisher = "";
@@ -32,12 +33,49 @@ const ListRow = ({
     }
   };
 
+  const difficultyFilters = {
+    Easy: ['Easy', 'Beginner', 'Grades I', 'Grades II', 'Grade I', 'Grade II'],
+    Medium: ['Medium', 'Med', 'Intermediate', 'Grade III', 'Grades III', 'Grade IV', 'Grades IV'],
+    Advanced: ['Advanced', 'Adv', 'Difficult', 'Grade V', 'Grades V', 'Grade VI', 'Grades VI']
+  }
+
+  // Filter matching functionality
+  const matchesFilters = () => {
+    if (filterValues.difficulty === '' && filterValues.numPlayers === '') return true;
+
+    let difficultyMatches = filterValues.difficulty ? false : true;
+    let numPlayersMatches = filterValues.numPlayers ? false : true;
+    
+    // Difficulty filter matching
+    if (filterValues.difficulty) {
+      for (const str of difficultyFilters[filterValues.difficulty]) {
+        if (ens?.level?.includes(str)) {
+          difficultyMatches = true;
+        } 
+      }
+    } 
+    
+    // Number of players filter matching
+    if (filterValues.numPlayers) {
+      const numPlayers = filterValues.numPlayers.split('+')[0];
+      const playersArr = ens?.players?.split(/[-:_+,]| /).filter(item => item.length > 0 && typeof item !== undefined);
+      const filteredPlayersArr = playersArr?.filter(item => /\d/.test(item));
+      filteredPlayersArr?.forEach((item, ind) => filteredPlayersArr[ind] = Number(item));
+      if (filteredPlayersArr?.length === 1) {
+        if (numPlayers == filteredPlayersArr[0]) numPlayersMatches = true;
+      } else if (filteredPlayersArr?.length > 1) {
+        if (numPlayers >= filteredPlayersArr[0] && numPlayers <= filteredPlayersArr[1]) numPlayersMatches = true;
+      }
+    }
+    return difficultyMatches && numPlayersMatches;
+  }
+
   return (
     <div
       className={
-        (dataPage == currentPage && searchTerm === "") ||
-        (searchTerm && isInSearch()) ||
-        !isList
+        !isList ||
+        (dataPage == currentPage && isInSearch() && matchesFilters()) ||
+        ((searchTerm !== '' && isInSearch()) || (filterValues.difficulty !== '' && matchesFilters()) || (filterValues.numPlayers !== '' && matchesFilters()))
           ? "list-row"
           : "list-row hide"
       }

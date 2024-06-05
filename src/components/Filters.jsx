@@ -3,7 +3,7 @@ import { useState } from "react"
 import { FaCaretDown, FaCaretUp } from "react-icons/fa";
 
 
-const Filters = ({ filterHeader, filterContents }) => {
+const Filters = ({ filterId, filterHeader, filterContents, updateFilters }) => {
   const [open, setOpen] = useState(false);
   const [selectedFilter, setSelectedFilter] = useState(''); 
 
@@ -11,10 +11,11 @@ const Filters = ({ filterHeader, filterContents }) => {
     setOpen(false);
     setSelectedFilter(filterOption);
     // TODO - filter the list
+    updateFilters(filterOption);
   }, []);
 
   return (
-    <div className="filters">
+    <div className="filters" id={filterId}>
       <div className="selected-filter" onClick={() => setOpen(!open)}><div className="selected-filter-text">{selectedFilter ? selectedFilter : filterHeader}</div>
         <FaCaretDown className={open ? 'filter-caret filter-down-caret hide' : 'filter-caret filter-down-caret'}/>
         <FaCaretUp className={open ? 'filter-caret filter-up-caret' : 'filter-caret filter-up-caret hide'}/>
