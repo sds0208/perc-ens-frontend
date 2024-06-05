@@ -1,5 +1,6 @@
 import { useParams, useLoaderData } from "react-router-dom";
 import ListRow from "../components/ListRow";
+import MediaPlayer from "../components/MediaPlayer";
 
 const EnsemblePage = () => {
   const { id } = useParams();
@@ -8,6 +9,7 @@ const EnsemblePage = () => {
   return (
     <div className="ensemble-page">
       <ListRow key={id} ens={ensemble} isList={false} />
+      <MediaPlayer audioSrc={ensemble.audio} isEnsemblePage={true}/>
     </div>
   );
 };

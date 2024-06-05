@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 
-const MediaPlayer = ({ audioSrc }) => {
+const MediaPlayer = ({ audioSrc, isEnsemblePage = false }) => {
   const audioTag = useRef();
   const queryString = audioSrc.includes("?")
     ? "&auto_play=true&autoplay=1"
@@ -15,7 +15,7 @@ const MediaPlayer = ({ audioSrc }) => {
   }, [audioSrc]);
 
   return (
-    <div className="media-player">
+    <div className="media-player" data-ensemble-page={isEnsemblePage}>
       <iframe
         id="media-iframe"
         className={

@@ -83,10 +83,11 @@ const ListRow = ({
     >
       <div className="title">{ens.title} </div>
       <div className="composer">{ens.composer}</div>
-      <div className={ens.audio ? "play-button" : "play-button hide"}>
+      <div className={ens.audio && isList ? "play-button" : "play-button hide"}>
         <FaPlayCircle className="play-button-icon" onClick={getAudioSrc} />
       </div>
-
+      <div className={!isList && ens.level ? 'ensemble-level' : 'ensemble-level hide'}>Level: {ens.level}</div>
+      <div className={!isList && ens.players ? 'ensemble-players' : 'ensemble-players hide'}>Players: {ens.players}</div>
       <div className="link-wrapper">
         <Link
           to={`/ensemble/${ens.id}`}
