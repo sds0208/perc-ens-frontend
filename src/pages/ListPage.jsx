@@ -26,10 +26,9 @@ const List = () => {
 
   useEffect(() => {
     setSearchResultsRendered(false);
-  }, [searchTerm]);
+  }, [searchTerm, filterValues]);
 
-  const updateSearch = useCallback((str) => {
-    setSearchTerm(str);
+  const updateSearchResultsCount = useCallback(() => {
     setTimeout(() => {
       setSearchResultsCount(
         listParentRef.current.querySelectorAll(".list-row:not(.hide)").length
@@ -38,18 +37,21 @@ const List = () => {
     }, 500);
   }, []);
 
+  const updateSearch = useCallback((str) => {
+    setSearchTerm(str);
+    updateSearchResultsCount();
+  }, []);
+
   // Filter functionality
   const updateDifficultyFilter = useCallback((str) => {
     setFilterValues((prev) => ({...prev, difficulty: str}));
+    updateSearchResultsCount();
   }, []);
 
   const updateNumPlayersFilter = useCallback((str) => {
     setFilterValues((prev) => ({...prev, numPlayers: str}));
+    updateSearchResultsCount();
   }, []);
-
-  useEffect(() => {
-    console.log(filterValues);
-  }, [filterValues]);
 
   // Sort
   const updateSortMethod = useCallback((method) => {
@@ -139,7 +141,6 @@ const List = () => {
         title="Percussion Ensemble DB"
         subtitle="A database of percussion ensembles offered by several major publishers"
       />
-      <SortLinks sortMethod={sortMethod} updateSortMethod={updateSortMethod} />
       {/* Filters */}
       <div className="filters-container">
         <Filters filterId="difficulty" filterHeader="Select Difficulty" filterContents={['Easy', 'Medium', 'Advanced']} updateFilters={updateDifficultyFilter}/>
@@ -150,12 +151,13 @@ const List = () => {
         updateSearch={(str) => updateSearch(str)}
         clearSearch={(str) => updateSearch(str)}
       />
+      <SortLinks sortMethod={sortMethod} updateSortMethod={updateSortMethod} />
       <div className={loading ? "loading-icon" : "loading-icon hide"}>
         <Spinner />
       </div>
       {/* All Results Count */}
       <p
-        className={searchTerm === "" ? "ensemble-count" : "ensemble-count hide"}
+        className={searchTerm === "" && filterValues.difficulty === '' && filterValues.numPlayers === '' ? "ensemble-count" : "ensemble-count hide"}
         key={`${sortMethod}-1`}
       >
         {`${totalEnsembles.current} ensembles sorted by `}
@@ -164,7 +166,7 @@ const List = () => {
       {/* Search Results Count */}
       <p
         className={
-          searchTerm.length > 0 && searchResultsRendered
+          (searchTerm.length > 0 && searchResultsRendered) || (filterValues.difficulty.length > 0 && searchResultsRendered) || (filterValues.numPlayers.length > 0 && searchResultsRendered)
             ? "ensemble-count"
             : "ensemble-count hide"
         }

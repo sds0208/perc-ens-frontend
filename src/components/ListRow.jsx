@@ -24,7 +24,7 @@ const ListRow = ({
 
   const isInSearch = () => {
     if (
-      searchTerm === "" ||
+      // searchTerm === "" ||
       ens.title.toLowerCase().includes(searchTerm) ||
       ens.composer.toLowerCase().includes(searchTerm) ||
       ens.link.toLowerCase().includes(searchTerm)
@@ -39,13 +39,16 @@ const ListRow = ({
     Advanced: ['Advanced', 'Adv', 'Difficult', 'Grade V', 'Grades V', 'Grade VI', 'Grades VI']
   }
 
+  const filterValuePresent = () => {
+    return filterValues.difficulty || filterValues.numPlayers;
+  }
+
   // Filter matching functionality
   const matchesFilters = () => {
-    if (filterValues.difficulty === '' && filterValues.numPlayers === '') return true;
+    // if (filterValues.difficulty === '' && filterValues.numPlayers === '') return true;
 
     let difficultyMatches = filterValues.difficulty ? false : true;
     let numPlayersMatches = filterValues.numPlayers ? false : true;
-    
     // Difficulty filter matching
     if (filterValues.difficulty) {
       for (const str of difficultyFilters[filterValues.difficulty]) {
@@ -74,8 +77,14 @@ const ListRow = ({
     <div
       className={
         !isList ||
-        (dataPage == currentPage && isInSearch() && matchesFilters()) ||
-        ((searchTerm !== '' && isInSearch()) || (filterValues.difficulty !== '' && matchesFilters()) || (filterValues.numPlayers !== '' && matchesFilters()))
+        // No filters or search
+        (dataPage == currentPage && searchTerm === '' && !filterValuePresent()) ||
+        // No search present, filters present and matching
+        (searchTerm === '' && (filterValuePresent() && matchesFilters())) ||
+        // Search present and in search, no filters present
+        ((searchTerm !== '' && isInSearch()) && (!filterValuePresent())) ||
+        // Search present and in search, filters present and matching
+        ((searchTerm !== '' && isInSearch()) && (filterValuePresent() && matchesFilters()))
           ? "list-row"
           : "list-row hide"
       }

@@ -1,4 +1,6 @@
 import { useState, useCallback } from "react";
+import { MdSearch } from "react-icons/md";
+import { FaRegWindowClose } from "react-icons/fa";
 
 const SearchBar = ({ updateSearch, clearSearch }) => {
   const [searchString, setSearchString] = useState("");
@@ -6,6 +8,7 @@ const SearchBar = ({ updateSearch, clearSearch }) => {
   const clear = useCallback(() => {
     setSearchString("");
     clearSearch("");
+    updateSearch('');
   }, []);
 
   return (
@@ -16,10 +19,10 @@ const SearchBar = ({ updateSearch, clearSearch }) => {
         id="search"
         onChange={(e) => setSearchString(e.target.value)}
       />
-      <button onClick={() => updateSearch(searchString.toLowerCase())}>
-        Search
-      </button>
-      <button onClick={clear}>Clear Search</button>
+      <div className="search-buttons">
+        <MdSearch className="search-bar-icon search-icon" onClick={() => updateSearch(searchString.toLowerCase())}/>
+        <FaRegWindowClose className="search-bar-icon" onClick={clear} />
+      </div>
     </div>
   );
 };

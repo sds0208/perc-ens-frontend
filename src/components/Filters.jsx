@@ -1,6 +1,6 @@
 import { useCallback } from "react";
 import { useState } from "react"
-import { FaCaretDown, FaCaretUp } from "react-icons/fa";
+import { FaCaretDown, FaCaretUp, FaRegWindowClose } from "react-icons/fa";
 
 
 const Filters = ({ filterId, filterHeader, filterContents, updateFilters }) => {
@@ -10,7 +10,6 @@ const Filters = ({ filterId, filterHeader, filterContents, updateFilters }) => {
   const handleOptionClick = useCallback((filterOption) => {
     setOpen(false);
     setSelectedFilter(filterOption);
-    // TODO - filter the list
     updateFilters(filterOption);
   }, []);
 
@@ -25,7 +24,9 @@ const Filters = ({ filterId, filterHeader, filterContents, updateFilters }) => {
           <div key={ind} className="filter-option" onClick={() => handleOptionClick(filterOption)}>{filterOption}</div>
         )}
       </div>
+      <FaRegWindowClose className="clear-filter-icon" onClick={() => handleOptionClick('')}/>
     </div>
+    
   )
 }
 

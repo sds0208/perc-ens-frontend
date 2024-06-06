@@ -2,7 +2,7 @@ const Hero = ({ title, subtitle }) => {
   return (
     <>
       <h1>{title}</h1>
-      <p>{subtitle}</p>
+      <p className="hero-subtitle">{subtitle}</p>
     </>
   );
 };

@@ -7,7 +7,7 @@ const MediaPlayer = ({ audioSrc, isEnsemblePage = false }) => {
     : "?auto_play=true&autoplay=1";
 
   useEffect(() => {
-    if (audioSrc.includes("mp3")) {
+    if (audioSrc.includes("mp3") && !isEnsemblePage) {
       audioTag.current.play();
     } else {
       audioTag.current.pause();
@@ -34,7 +34,7 @@ const MediaPlayer = ({ audioSrc, isEnsemblePage = false }) => {
         src={
           audioSrc.includes("mp3") || audioSrc === ""
             ? ""
-            : `${audioSrc}${queryString}`
+            : `${audioSrc}${isEnsemblePage ? '' : queryString}`
         }
       ></iframe>
       <audio
