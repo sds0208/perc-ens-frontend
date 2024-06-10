@@ -106,7 +106,7 @@ const List = () => {
     const fetchAllEnsembles = async () => {
       try {
         // Get ensemble list from backend
-        const res = await fetch("http://localhost:3000/api/v1/ensembles");
+        const res = await fetch("https://perc-ens-api.netlify.app/api/v1/ensembles");
         let data = await res.json();
 
         // Remove duplicate digital versions from C.Alan

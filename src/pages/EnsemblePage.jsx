@@ -17,7 +17,7 @@ const EnsemblePage = () => {
 const ensembleLoader = async ({ params }) => {
   try {
     const res = await fetch(
-      `http://localhost:3000/api/v1/ensembles/${params.id}`
+      `https://perc-ens-api.netlify.app/api/v1/ensembles/${params.id}`
     );
     const data = await res.json();
     return data[0];
