@@ -101,6 +101,22 @@ const List = () => {
     setCurrentPage(1);
   }, [sortMethod]);
 
+  useEffect(() => {
+    const fetchTest = async () => {
+      try {
+        // Get ensemble list from backend
+        const res = await fetch("https://perc-ens-api.netlify.app/");
+        let data = await res.json();
+        console.log(res);
+        console.log(data);
+      } catch (error) {
+        console.error("Error in test fetch call.", error);
+      } 
+    };
+
+    fetchTest();
+  }, []);
+
   // Fetch on first render
   useEffect(() => {
     const fetchAllEnsembles = async () => {
