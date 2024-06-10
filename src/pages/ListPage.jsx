@@ -106,9 +106,7 @@ const List = () => {
       try {
         // Get ensemble list from backend
         const res = await fetch("https://perc-ens-db-18ac1191785c.herokuapp.com/");
-        let data = await res.json();
         console.log(res);
-        console.log(data);
       } catch (error) {
         console.error("Error in test fetch call.", error);
       } 
