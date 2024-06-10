@@ -135,7 +135,7 @@ const List = () => {
   }, []);
 
   return (
-    <div className="list" ref={listParentRef}>
+    <div className="list-page" ref={listParentRef}>
       {/* Page Hero */}
       <Hero
         title="Percussion Ensemble DB"

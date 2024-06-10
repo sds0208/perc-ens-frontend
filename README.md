@@ -8,6 +8,4 @@ There are 3 parts to the application:
 - [The back end](https://github.com/sds0208/perc-ens-backend) - built with Node.js and Express.js
 - [The scrapers](https://github.com/sds0208/perc-ens-scraper) - built with Python
 
-As of the end of May 2024, this is still a work in progress, but feel free to look around and see how it's going!
-
-Preview links coming soon!
+As of the end of June 2024, this is only an MVP, but feel free to look around and see how it's going!
