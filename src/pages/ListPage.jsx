@@ -105,7 +105,7 @@ const List = () => {
     const fetchTest = async () => {
       try {
         // Get ensemble list from backend
-        const res = await fetch("https://perc-ens-api.netlify.app/");
+        const res = await fetch("https://perc-ens-db-18ac1191785c.herokuapp.com/");
         let data = await res.json();
         console.log(res);
         console.log(data);
@@ -122,7 +122,7 @@ const List = () => {
     const fetchAllEnsembles = async () => {
       try {
         // Get ensemble list from backend
-        const res = await fetch("https://perc-ens-api.netlify.app/api/v1/ensembles");
+        const res = await fetch("https://perc-ens-db-18ac1191785c.herokuapp.com/api/v1/ensembles");
         let data = await res.json();
 
         // Remove duplicate digital versions from C.Alan

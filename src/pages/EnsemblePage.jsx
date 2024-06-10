@@ -17,7 +17,7 @@ const EnsemblePage = () => {
 const ensembleLoader = async ({ params }) => {
   try {
     const res = await fetch(
-      `https://perc-ens-api.netlify.app/api/v1/ensembles/${params.id}`
+      `https://perc-ens-db-18ac1191785c.herokuapp.com/api/v1/ensembles/${params.id}`
     );
     const data = await res.json();
     return data[0];
