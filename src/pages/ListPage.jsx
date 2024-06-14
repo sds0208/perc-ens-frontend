@@ -39,30 +39,21 @@ const List = () => {
     }, 500);
   }, []);
 
-  const updateSearch = useCallback(
-    (str) => {
-      setSearchTerm(str);
-      updateSearchResultsCount();
-    },
-    [updateSearchResultsCount]
-  );
+  const updateSearch = useCallback((str) => {
+    setSearchTerm(str);
+    updateSearchResultsCount();
+  }, []);
 
   // Filter functionality
-  const updateDifficultyFilter = useCallback(
-    (str) => {
-      setFilterValues((prev) => ({ ...prev, difficulty: str }));
-      updateSearchResultsCount();
-    },
-    [updateSearchResultsCount]
-  );
+  const updateDifficultyFilter = useCallback((str) => {
+    setFilterValues((prev) => ({ ...prev, difficulty: str }));
+    updateSearchResultsCount();
+  }, []);
 
-  const updateNumPlayersFilter = useCallback(
-    (str) => {
-      setFilterValues((prev) => ({ ...prev, numPlayers: str }));
-      updateSearchResultsCount();
-    },
-    [updateSearchResultsCount]
-  );
+  const updateNumPlayersFilter = useCallback((str) => {
+    setFilterValues((prev) => ({ ...prev, numPlayers: str }));
+    updateSearchResultsCount();
+  }, []);
 
   // Sort
   const updateSortMethod = useCallback((method) => {
@@ -86,7 +77,7 @@ const List = () => {
     }
     setAllEnsembles(newArray);
     setCurrentPage(1);
-  }, [sortMethod, allEnsembles]);
+  }, [sortMethod]);
 
   // Fetch on first render
   useEffect(() => {
