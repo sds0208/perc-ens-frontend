@@ -12,7 +12,7 @@ const MediaPlayer = ({ audioSrc, isEnsemblePage = false }) => {
     } else {
       audioTag.current.pause();
     }
-  }, [audioSrc]);
+  }, [audioSrc, isEnsemblePage]);
 
   return (
     <div className="media-player" data-ensemble-page={isEnsemblePage}>
@@ -34,7 +34,7 @@ const MediaPlayer = ({ audioSrc, isEnsemblePage = false }) => {
         src={
           audioSrc.includes("mp3") || audioSrc === ""
             ? ""
-            : `${audioSrc}${isEnsemblePage ? '' : queryString}`
+            : `${audioSrc}${isEnsemblePage ? "" : queryString}`
         }
       ></iframe>
       <audio

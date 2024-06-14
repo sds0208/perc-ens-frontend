@@ -17,10 +17,12 @@ const List = () => {
   const [searchResultsCount, setSearchResultsCount] = useState(0);
   const [audioSrc, setAudioSrc] = useState("");
   const [searchResultsRendered, setSearchResultsRendered] = useState(true);
-  const [filterValues, setFilterValues] = useState({numPlayers: '', difficulty: ''});
+  const [filterValues, setFilterValues] = useState({
+    numPlayers: "",
+    difficulty: "",
+  });
 
   const totalPages = useRef(0);
-  // const searchPages = useRef(0);
   const totalEnsembles = useRef(0);
   const listParentRef = useRef();
 
@@ -37,49 +39,34 @@ const List = () => {
     }, 500);
   }, []);
 
-  const updateSearch = useCallback((str) => {
-    setSearchTerm(str);
-    updateSearchResultsCount();
-  }, []);
+  const updateSearch = useCallback(
+    (str) => {
+      setSearchTerm(str);
+      updateSearchResultsCount();
+    },
+    [updateSearchResultsCount]
+  );
 
   // Filter functionality
-  const updateDifficultyFilter = useCallback((str) => {
-    setFilterValues((prev) => ({...prev, difficulty: str}));
-    updateSearchResultsCount();
-  }, []);
+  const updateDifficultyFilter = useCallback(
+    (str) => {
+      setFilterValues((prev) => ({ ...prev, difficulty: str }));
+      updateSearchResultsCount();
+    },
+    [updateSearchResultsCount]
+  );
 
-  const updateNumPlayersFilter = useCallback((str) => {
-    setFilterValues((prev) => ({...prev, numPlayers: str}));
-    updateSearchResultsCount();
-  }, []);
+  const updateNumPlayersFilter = useCallback(
+    (str) => {
+      setFilterValues((prev) => ({ ...prev, numPlayers: str }));
+      updateSearchResultsCount();
+    },
+    [updateSearchResultsCount]
+  );
 
   // Sort
   const updateSortMethod = useCallback((method) => {
     setSortMethod(method);
-  }, []);
-
-  // Format composer values for consistency
-  // Update this once scraping is completed
-  const returnEnsembleArrayWithComposer = useCallback((arr) => {
-    arr.forEach((item, ind) => {
-      let composer = item.composer || "";
-      let nameArr;
-      if (composer.length && !composer.includes(",")) {
-        nameArr = composer.split(" ");
-        if (composer.includes("Santa Cruz")) {
-          composer = "Santa Cruz, Sarah";
-        } else {
-          composer = `${nameArr[nameArr.length - 1]}, ${nameArr
-            .slice(0, nameArr.length - 1)
-            .join(" ")}`;
-        }
-      }
-      if (composer.length && composer.includes("(")) {
-        composer = composer.slice(0, composer.indexOf("(") - 1);
-      }
-      arr[ind]["composer"] = composer;
-    });
-    return arr;
   }, []);
 
   // Sort functionality
@@ -99,28 +86,40 @@ const List = () => {
     }
     setAllEnsembles(newArray);
     setCurrentPage(1);
-  }, [sortMethod]);
-
-  useEffect(() => {
-    const fetchTest = async () => {
-      try {
-        // Get ensemble list from backend
-        const res = await fetch("https://perc-ens-db-18ac1191785c.herokuapp.com/");
-        console.log(res);
-      } catch (error) {
-        console.error("Error in test fetch call.", error);
-      } 
-    };
-
-    fetchTest();
-  }, []);
+  }, [sortMethod, allEnsembles]);
 
   // Fetch on first render
   useEffect(() => {
+    // Format composer values for consistency
+    // TODO - format this in database and remove this function
+    const returnEnsembleArrayWithComposer = (arr) => {
+      arr.forEach((item, ind) => {
+        let composer = item.composer || "";
+        let nameArr;
+        if (composer.length && !composer.includes(",")) {
+          nameArr = composer.split(" ");
+          if (composer.includes("Santa Cruz")) {
+            composer = "Santa Cruz, Sarah";
+          } else {
+            composer = `${nameArr[nameArr.length - 1]}, ${nameArr
+              .slice(0, nameArr.length - 1)
+              .join(" ")}`;
+          }
+        }
+        if (composer.length && composer.includes("(")) {
+          composer = composer.slice(0, composer.indexOf("(") - 1);
+        }
+        arr[ind]["composer"] = composer;
+      });
+      return arr;
+    };
+
     const fetchAllEnsembles = async () => {
       try {
         // Get ensemble list from backend
-        const res = await fetch("https://perc-ens-db-18ac1191785c.herokuapp.com/api/v1/ensembles");
+        const res = await fetch(
+          "https://perc-ens-db-18ac1191785c.herokuapp.com/api/v1/ensembles"
+        );
         let data = await res.json();
 
         // Remove duplicate digital versions from C.Alan
@@ -157,8 +156,33 @@ const List = () => {
       />
       {/* Filters */}
       <div className="filters-container">
-        <Filters filterId="difficulty" filterHeader="Select Difficulty" filterContents={['Easy', 'Medium', 'Advanced']} updateFilters={updateDifficultyFilter}/>
-        <Filters filterId="numPlayers" filterHeader="Number of Players" filterContents={['2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15+']} updateFilters={updateNumPlayersFilter}/>
+        <Filters
+          filterId="difficulty"
+          filterHeader="Select Difficulty"
+          filterContents={["Easy", "Medium", "Advanced"]}
+          updateFilters={updateDifficultyFilter}
+        />
+        <Filters
+          filterId="numPlayers"
+          filterHeader="Number of Players"
+          filterContents={[
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "7",
+            "8",
+            "9",
+            "10",
+            "11",
+            "12",
+            "13",
+            "14",
+            "15+",
+          ]}
+          updateFilters={updateNumPlayersFilter}
+        />
       </div>
       {/* Ensemble Search */}
       <SearchBar
@@ -171,7 +195,13 @@ const List = () => {
       </div>
       {/* All Results Count */}
       <p
-        className={searchTerm === "" && filterValues.difficulty === '' && filterValues.numPlayers === '' ? "ensemble-count" : "ensemble-count hide"}
+        className={
+          searchTerm === "" &&
+          filterValues.difficulty === "" &&
+          filterValues.numPlayers === ""
+            ? "ensemble-count"
+            : "ensemble-count hide"
+        }
         key={`${sortMethod}-1`}
       >
         {`${totalEnsembles.current} ensembles sorted by `}
@@ -180,7 +210,9 @@ const List = () => {
       {/* Search Results Count */}
       <p
         className={
-          (searchTerm.length > 0 && searchResultsRendered) || (filterValues.difficulty.length > 0 && searchResultsRendered) || (filterValues.numPlayers.length > 0 && searchResultsRendered)
+          (searchTerm.length > 0 && searchResultsRendered) ||
+          (filterValues.difficulty.length > 0 && searchResultsRendered) ||
+          (filterValues.numPlayers.length > 0 && searchResultsRendered)
             ? "ensemble-count"
             : "ensemble-count hide"
         }

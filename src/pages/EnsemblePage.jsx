@@ -9,7 +9,7 @@ const EnsemblePage = () => {
   return (
     <div className="ensemble-page">
       <ListRow key={id} ens={ensemble} isList={false} />
-      <MediaPlayer audioSrc={ensemble.audio} isEnsemblePage={true}/>
+      <MediaPlayer audioSrc={ensemble.audio} isEnsemblePage={true} />
     </div>
   );
 };

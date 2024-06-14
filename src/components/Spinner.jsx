@@ -6,6 +6,7 @@ const override = {
 };
 
 const Spinner = ({ loading }) => {
+  console.log("loading spinner");
   return (
     <DotLoader
       color="#91fa9b"

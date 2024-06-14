@@ -8,8 +8,8 @@ const SearchBar = ({ updateSearch, clearSearch }) => {
   const clear = useCallback(() => {
     setSearchString("");
     clearSearch("");
-    updateSearch('');
-  }, []);
+    updateSearch("");
+  }, [clearSearch, updateSearch]);
 
   return (
     <div className="search-bar">
@@ -20,7 +20,10 @@ const SearchBar = ({ updateSearch, clearSearch }) => {
         onChange={(e) => setSearchString(e.target.value)}
       />
       <div className="search-buttons">
-        <MdSearch className="search-bar-icon search-icon" onClick={() => updateSearch(searchString.toLowerCase())}/>
+        <MdSearch
+          className="search-bar-icon search-icon"
+          onClick={() => updateSearch(searchString.toLowerCase())}
+        />
         <FaRegWindowClose className="search-bar-icon" onClick={clear} />
       </div>
     </div>
