@@ -180,13 +180,16 @@ h1 {
     }
 }
 
-#media-iframe {
-    &[data-ensemble-page=false] {
+[data-ensemble-page=false] {
+    #media-iframe {
         position: fixed;
         bottom: 0;
         right: 0;
         width: 100%;
     }
+}
+
+#media-iframe {
     background: transparent;
 
     &.youtube-iframe {
